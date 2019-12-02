@@ -90,4 +90,33 @@ app.delete('/todos/:id', (req, res) => {
   });
 });
 
+app.patch('/todos/:id', (req, res) => {
+  fs.readFile(FILE_PATH, 'utf8', (err, data) => {
+    if (err) {
+      throw err;
+    }
+    if (data) {
+      const todos = JSON.parse(data);
+      // check if there is todo with this id
+      const index = todos.findIndex(todo => todo.id === req.params.id);
+      if (index >= 0) {
+        // done/undone todo
+        todos[index].done = !todos[index].done;
+        fs.writeFile(FILE_PATH, JSON.stringify(todos), err => {
+          if (err) {
+            throw err;
+          }
+          res.status(200).send(todos[index]);
+        });
+      } else {
+        const err = {
+          status: 400,
+          message: `Todo with this id: ${req.params.id} doesn't exist.`
+        };
+        res.status(err.status).send(err.message);
+      }
+    }
+  });
+});
+
 app.listen(port, () => console.log(`Server is running on port ${port}!`));
