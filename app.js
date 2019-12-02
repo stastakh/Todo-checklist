@@ -3,11 +3,13 @@ const bodyParser = require('body-parser');
 
 const fs = require('fs');
 const uuidv4 = require('uuid/v4');
+const Joi = require('@hapi/joi');
 
 const app = express();
 const port = 3000;
 
 const Todo = require('./models/Todo');
+const todoSchema = require('./validation/todo');
 
 const FILE_PATH = './data/todos.json';
 
@@ -29,17 +31,30 @@ app.post('/todos', (req, res) => {
     }
     if (data) {
       const todos = JSON.parse(data);
-      const newTodo = new Todo({
-        id: uuidv4(),
-        name: req.body.name,
-        description: req.body.description
-      });
-      todos.push(newTodo);
-      fs.writeFile(FILE_PATH, JSON.stringify(todos), err => {
-        if (err) {
-          throw err;
-        }
-      });
+      // Check if data is valid
+      const { error, value } = todoSchema.validate(req.body);
+      if (!error) {
+        // data is valid -> create new todo
+        const newTodo = new Todo({
+          id: uuidv4(),
+          name: value.name,
+          description: value.description
+        });
+        // add new todo to the todos array
+        todos.push(newTodo);
+        fs.writeFile(FILE_PATH, JSON.stringify(todos), err => {
+          if (err) {
+            throw err;
+          }
+          res.status(200).send(newTodo);
+        });
+      } else {
+        const err = {
+          status: 400,
+          message: error.details[0].message
+        };
+        res.status(err.status).send(err.message);
+      }
     }
   });
 });
