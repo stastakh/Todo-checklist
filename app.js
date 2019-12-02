@@ -10,4 +10,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/todos', todos);
 
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).send(err.message);
+});
+
 app.listen(port, () => console.log(`Server is running on port ${port}!`));

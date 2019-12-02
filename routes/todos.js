@@ -4,11 +4,15 @@ const router = express.Router();
 const fs = require('fs');
 const uuidv4 = require('uuid/v4');
 
+const authMiddleware = require('../middleware/auth');
+
 const Todo = require('../models/Todo');
 const todoSchema = require('../validation/todo');
 
 const FILE_PATH = './data/todos.json';
 
+// get all todos - GET /todos
+// public
 router.get('/', (req, res) => {
   fs.readFile(FILE_PATH, 'utf8', (err, data) => {
     if (err) {
@@ -18,7 +22,9 @@ router.get('/', (req, res) => {
   });
 });
 
-router.post('/', (req, res) => {
+// add todo - POST /todos
+// private
+router.post('/', authMiddleware, (req, res) => {
   fs.readFile(FILE_PATH, 'utf8', (err, data) => {
     if (err) {
       throw err;
@@ -53,7 +59,9 @@ router.post('/', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
+// remove todo - DELETE /todo/:id
+// private
+router.delete('/:id', authMiddleware, (req, res) => {
   fs.readFile(FILE_PATH, 'utf8', (err, data) => {
     if (err) {
       throw err;
@@ -84,7 +92,9 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-router.patch('/:id', (req, res) => {
+// done/undone todo - PATCH /todo/:id
+// private
+router.patch('/:id', authMiddleware, (req, res) => {
   fs.readFile(FILE_PATH, 'utf8', (err, data) => {
     if (err) {
       throw err;
