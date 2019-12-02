@@ -100,6 +100,7 @@ const toggleTodoCompletion = (req, res, next) => {
 
 module.exports = {
   getDataFromFile: getDataFromFile,
+  rewriteFile: rewriteFile,
   getTodos: getTodos,
   addTodo: addTodo,
   removeTodo: removeTodo,

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1352719d-1d8f-4f60-818c-6d55069c9b45",
+    "name": "Do homework",
+    "description": "Do Node.js homework: 1) config server 2) create routes",
+    "createdAt": "2019-11-30T20:59:44.753Z",
+    "done": false
+  },
+  {
+    "id": "5df72b70-8d06-42b5-96d3-e6d59178b54e",
+    "name": "Buy food for dinner",
+    "description": "Buy 1) meat; 2) potatoes; 3) tomatoes",
+    "createdAt": "2019-12-02T16:21:21.195Z",
+    "done": false
+  },
+  {
+    "id": "94631f0d-9d8b-4183-97e2-3cbc2967985f",
+    "name": "Go for a walk with a the dog",
+    "description": "Need to go for a walk with the dog at 19:30",
+    "createdAt": "2019-12-02T16:45:53.033Z",
+    "done": true
+  }
+]
