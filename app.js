@@ -59,4 +59,35 @@ app.post('/todos', (req, res) => {
   });
 });
 
+app.delete('/todos/:id', (req, res) => {
+  fs.readFile(FILE_PATH, 'utf8', (err, data) => {
+    if (err) {
+      throw err;
+    }
+    if (data) {
+      const todos = JSON.parse(data);
+      const index = todos.findIndex(todo => todo.id === req.params.id);
+      if (index >= 0) {
+        // delete todo from todos
+        console.log(todos);
+        const [deletedTodo] = todos.splice(index, 1);
+
+        fs.writeFile(FILE_PATH, JSON.stringify(todos), err => {
+          if (err) {
+            throw err;
+          }
+        });
+        console.log(deletedTodo);
+        res.status(200).send(deletedTodo);
+      } else {
+        const err = {
+          status: 400,
+          message: `Todo with this id: ${req.params.id} doesn't exist.`
+        };
+        res.status(err.status).send(err.message);
+      }
+    }
+  });
+});
+
 app.listen(port, () => console.log(`Server is running on port ${port}!`));
